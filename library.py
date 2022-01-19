@@ -172,7 +172,7 @@ class TukeyTransformer(BaseEstimator, TransformerMixin):
   def transform(self, X):
     X_ = X.copy()
 
-    q1, q3 = X_[column].quantile(q = [0.25, 0.75])
+    q1, q3 = X_[self.target_column].quantile(q = [0.25, 0.75])
     iqr = q3-q1
 
     out_low = q1-3*iqr
