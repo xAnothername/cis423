@@ -177,10 +177,15 @@ class TukeyTransformer(BaseEstimator, TransformerMixin):
 
     out_low = q1-3*iqr
     out_high = q3+3*iqr
+    in_low = q1-1.5*iqr
+    in_high = q1+1.5*iqr
 
-    if self.fence == 'inner' : X_[self.target_column] = X_[self.target_column].clip(lower=q1, upper=q3)
+    if self.fence == 'inner': 
+      X_[self.target_column] = X_[self.target_column].clip(lower=in_low, upper=in_high)
 
-    X_[self.target_column] = X_[self.target_column].clip(lower=out_low, upper=out_high)
+    else: 
+      X_[self.target_column] = X_[self.target_column].clip(lower=out_low, upper=out_high)
+    
     return X_
 
   def fit_transform(self, X, y = None):
