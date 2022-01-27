@@ -164,30 +164,50 @@ class TukeyTransformer(BaseEstimator, TransformerMixin):
     assert fence in ['inner', 'outer']
     self.target_column = target_column
     self.fence = fence
-
+  
   def fit(self, X, y = None):
     print("Warning: MappingTransformer.fit does nothing.")
     return X
 
   def transform(self, X):
     X_ = X.copy()
-
-    q1, q3 = X_[self.target_column].quantile(q = [0.25, 0.75])
+    q1 = X_[self.target_column].quantile(0.25)
+    q3 = X_[self.target_column].quantile(0.75)
     iqr = q3-q1
-
-    out_low = q1-3*iqr
-    out_high = q3+3*iqr
-    in_low = q1-1.5*iqr
-    in_high = q1+1.5*iqr
-
-    if self.fence == 'inner': 
-      X_[self.target_column] = X_[self.target_column].clip(lower=in_low, upper=in_high)
-
-    else: 
-      X_[self.target_column] = X_[self.target_column].clip(lower=out_low, upper=out_high)
-    
+    outer_low = q1-3*iqr
+    outer_high = q3+3*iqr
+    inner_low = q1 - 1.5*iqr
+    inner_high = q3 + 1.5*iqr
+    if self.fence == 'inner':
+      X_[self.target_column] = X_[self.target_column].clip(lower=inner_low, upper=inner_high)
+    elif self.fence == 'outer':
+      X_[self.target_column] = X_[self.target_column].clip(lower=outer_low, upper=outer_high)
     return X_
 
   def fit_transform(self, X, y = None):
     result = self.transform(X)
     return result
+  
+  
+class MinMaxTransformer(BaseEstimator, TransformerMixin):
+  def __init__(self):
+    pass
+  #fill in rest below
+  def fit(self, X, y = None):
+    print("not implemented")
+    return X
+
+  def transform(self, mtx):
+    new_df = mtx.copy()
+    for column in new_df:
+      mi = new_df[column].min()
+      mx = new_df[column].max()
+      denominator = mx - mi
+      new_df[column] -= mi #x - min(x) <- top of function
+      new_df[column] /= denominator
+    return new_df
+
+  def fit_transform(self, X, y = None):
+    result = self.transform(X)
+    return result
+  
