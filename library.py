@@ -210,4 +210,24 @@ class MinMaxTransformer(BaseEstimator, TransformerMixin):
   def fit_transform(self, X, y = None):
     result = self.transform(X)
     return result
+
   
+class KNNTransformer(BaseEstimator, TransformerMixin):
+  def __init__(self,n_neighbors=5, weights="uniform", add_indicator=False):
+    self.n_neighbors = n_neighbors
+    self.weights=weights 
+    self.add_indicator=add_indicator
+
+  #your code
+  def fit(self, X, y = None):
+    print(f"Warning: {self.__class__.__name__}.fit does nothing.")
+    return self
+
+  def transform(self, X):
+    X_ = X.copy()
+    knn = KNNImputer(n_neighbors=self.n_neighbors, weights=self.weights, add_indicator=self.add_indicator)
+    return pd.DataFrame(knn.fit_transform(X_), columns=X_.columns)
+
+  def fit_transform(self, X, y = None):
+    result = self.transform(X)
+    return result
