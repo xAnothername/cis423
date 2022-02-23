@@ -7,6 +7,7 @@ from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_sc
 from sklearn.experimental import enable_halving_search_cv
 from sklearn.model_selection import train_test_split, HalvingGridSearchCV
 from sklearn.linear_model import LogisticRegressionCV
+from sklearn.neighbors import KNeighborsClassifier
 model = LogisticRegressionCV(random_state=1, max_iter=5000)
 
 class MappingTransformer(BaseEstimator, TransformerMixin):
