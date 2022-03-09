@@ -238,6 +238,71 @@ class KNNTransformer(BaseEstimator, TransformerMixin):
   def fit_transform(self, X, y = None):
     result = self.transform(X)
     return result
+
+
+class SplittingTransformer(BaseEstimator, TransformerMixin):
+  def __init__(self, target_column, split_names:list, split_target:str, drop=True):  
+    self.split_names = split_names      #New column names
+    self.split_target = split_target    #Where to split on cell value
+    self.target_column = target_column  #column to focus on
+    self.drop = drop                    #Remove the old column
+
+  def fit(self, X, y = None):
+    print("Warning: MappingTransformer.fit does nothing.")
+    return X
+
+  def transform(self, X):
+    X_ = X.copy()
+    X_[self.split_names] = X_[self.target_column].str.split(self.split_target, expand=True)
+
+    if self.drop:
+      del X_[self.target_column]
+
+    return X_
+
+  def fit_transform(self, X, y = None):
+    result = self.transform(X)
+    return result
+
+  
+class CombiningTransformer(BaseEstimator, TransformerMixin):
+  def __init__(self, new_column, target_columns:list):  
+    self.new_column = new_column            #New column name
+    self.target_columns = target_columns    #Which columns to add together
+
+  def fit(self, X, y = None):
+    print("Warning: MappingTransformer.fit does nothing.")
+    return X
+
+  def transform(self, X):
+    X_ = X.copy()
+
+    X_[self.new_column] = X_[self.target_columns].sum(axis=1)
+
+    return X_
+
+  def fit_transform(self, X, y = None):
+    result = self.transform(X)
+    return result
+
+  
+class NaNsTransformer(BaseEstimator, TransformerMixin):
+  def __init__(self, target_columns:list, value):  
+    self.target_columns = target_columns  
+    self.value = value
+
+  def fit(self, X, y = None):
+    print("Warning: MappingTransformer.fit does nothing.")
+    return X
+
+  def transform(self, X):
+    X_ = X.copy()
+    X_[self.target_columns].replace(to_replace=np.nan, value=self.value)
+    return X_
+
+  def fit_transform(self, X, y = None):
+    result = self.transform(X)
+    return result
   
   
 def find_random_state(df, labels, n=200):
@@ -334,73 +399,6 @@ def halving_search(model, grid, x_train, y_train, factor=3, scoring='roc_auc'):
 
   return halving_cv.fit(x_train, y_train)
 
-
-#New additions to library
-
-class SplittingTransformer(BaseEstimator, TransformerMixin):
-  
-  def __init__(self, target_column, split_names:list, split_target:str, drop=True):  
-    self.split_names = split_names      #New column names
-    self.split_target = split_target    #Where to split on cell value
-    self.target_column = target_column  #column to focus on
-    self.drop = drop                    #Remove the old column
-
-  def fit(self, X, y = None):
-    print("Warning: MappingTransformer.fit does nothing.")
-    return X
-
-  def transform(self, X):
-    X_ = X.copy()
-    X_[self.split_names] = X_[self.target_column].str.split(self.split_target, expand=True)
-
-    if self.drop:
-      del X_[self.target_column]
-
-    return X_
-
-  def fit_transform(self, X, y = None):
-    result = self.transform(X)
-    return result
-
-class CombiningTransformer(BaseEstimator, TransformerMixin):
-  
-  def __init__(self, new_column, target_columns:list):  
-    self.new_column = new_column            #New column name
-    self.target_columns = target_columns    #Which columns to add together
-
-  def fit(self, X, y = None):
-    print("Warning: MappingTransformer.fit does nothing.")
-    return X
-
-  def transform(self, X):
-    X_ = X.copy()
-    
-    X_[self.new_column] = X_[self.target_columns].sum(axis=1)
-      
-    return X_
-
-  def fit_transform(self, X, y = None):
-    result = self.transform(X)
-    return result
-
-class NaNsTransformer(BaseEstimator, TransformerMixin):
-  
-  def __init__(self, target_columns:list, value):  
-    self.target_columns = target_columns  
-    self.value = value
-
-  def fit(self, X, y = None):
-    print("Warning: MappingTransformer.fit does nothing.")
-    return X
-
-  def transform(self, X):
-    X_ = X.copy()
-    X_[self.target_columns].replace(to_replace=np.nan, value=self.value)
-    return X_
-
-  def fit_transform(self, X, y = None):
-    result = self.transform(X)
-    return result
 
 #final transformer  
 enterprise_transformer = Pipeline(steps=[
