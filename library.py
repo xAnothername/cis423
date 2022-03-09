@@ -402,7 +402,8 @@ class NaNsTransformer(BaseEstimator, TransformerMixin):
     result = self.transform(X)
     return result
 
-  enterprise_transformer = Pipeline(steps=[
+#final transformer  
+enterprise_transformer = Pipeline(steps=[
     ('Home', OHETransformer(target_column='HomePlanet')),
     ('Cryo', MappingTransformer('CryoSleep', {False: 0, True: 1})),
     ('Cabin', SplittingTransformer('Cabin', ['Deck', 'Num', 'Side'], '/')),
