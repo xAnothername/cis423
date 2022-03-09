@@ -404,23 +404,23 @@ class NaNsTransformer(BaseEstimator, TransformerMixin):
 
 #final transformer  
 enterprise_transformer = Pipeline(steps=[
-    ('Home', OHETransformer(target_column='HomePlanet')),
-    ('Cryo', MappingTransformer('CryoSleep', {False: 0, True: 1})),
-    ('Cabin', SplittingTransformer('Cabin', ['Deck', 'Num', 'Side'], '/')),
-    ('Dest', OHETransformer(target_column='Destination')),
-    ('Age', TukeyTransformer('Age', 'outer')),
-    ('VIP', MappingTransformer('VIP', {False: 0, True: 1})),
-    ('NaNs', NaNsTransformer(['RoomService', 'FoodCourt', 'ShoppingMall', 'Spa', 'VRDeck'], 0.0)),
-    ('New', CombiningTransformer('TotalSpent', ['RoomService', 'FoodCourt', 'ShoppingMall', 'Spa', 'VRDeck'])),
-    ('Room', TukeyTransformer('RoomService', 'outer')),
-    ('Food', TukeyTransformer('FoodCourt', 'outer')),
-    ('Shop', TukeyTransformer('ShoppingMall', 'outer')),
-    ('Spa', TukeyTransformer('Spa', 'outer')),
-    ('VR', TukeyTransformer('VRDeck', 'outer')),
-    ('Total', TukeyTransformer('TotalSpent', 'outer')),
-    ('Deck', OHETransformer(target_column='Deck')),
-    ('Side', MappingTransformer('Side', {'P': 0, 'S': 1})),
-    ('Drop', DropColumnsTransformer(['PassengerId', 'Name', 'Num'], 'drop')),
-    ('scale', MinMaxTransformer()), 
-    ('imputer', KNNTransformer())
-    ], verbose=True)
+  ('Home', OHETransformer(target_column='HomePlanet')),
+  ('Cryo', MappingTransformer('CryoSleep', {False: 0, True: 1})),
+  ('Cabin', SplittingTransformer('Cabin', ['Deck', 'Num', 'Side'], '/')),
+  ('Dest', OHETransformer(target_column='Destination')),
+  ('Age', TukeyTransformer('Age', 'outer')),
+  ('VIP', MappingTransformer('VIP', {False: 0, True: 1})),
+  ('NaNs', NaNsTransformer(['RoomService', 'FoodCourt', 'ShoppingMall', 'Spa', 'VRDeck'], 0.0)),
+  ('New', CombiningTransformer('TotalSpent', ['RoomService', 'FoodCourt', 'ShoppingMall', 'Spa', 'VRDeck'])),
+  ('Room', TukeyTransformer('RoomService', 'outer')),
+  ('Food', TukeyTransformer('FoodCourt', 'outer')),
+  ('Shop', TukeyTransformer('ShoppingMall', 'outer')),
+  ('Spa', TukeyTransformer('Spa', 'outer')),
+  ('VR', TukeyTransformer('VRDeck', 'outer')),
+  ('Total', TukeyTransformer('TotalSpent', 'outer')),
+  ('Deck', OHETransformer(target_column='Deck')),
+  ('Side', MappingTransformer('Side', {'P': 0, 'S': 1})),
+  ('Drop', DropColumnsTransformer(['PassengerId', 'Name', 'Num'], 'drop')),
+  ('scale', MinMaxTransformer()), 
+  ('imputer', KNNTransformer())
+  ], verbose=True)
