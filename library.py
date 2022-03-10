@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import lime 
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline
 from sklearn.impute import KNNImputer
@@ -9,7 +8,6 @@ from sklearn.experimental import enable_halving_search_cv
 from sklearn.model_selection import train_test_split, HalvingGridSearchCV
 from sklearn.linear_model import LogisticRegressionCV
 from sklearn.neighbors import KNeighborsClassifier
-from lime import lime_tabular
 model = LogisticRegressionCV(random_state=1, max_iter=5000)
 
 class MappingTransformer(BaseEstimator, TransformerMixin):
