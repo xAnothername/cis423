@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import lime 
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline
 from sklearn.impute import KNNImputer
@@ -8,6 +9,7 @@ from sklearn.experimental import enable_halving_search_cv
 from sklearn.model_selection import train_test_split, HalvingGridSearchCV
 from sklearn.linear_model import LogisticRegressionCV
 from sklearn.neighbors import KNeighborsClassifier
+from lime import lime_tabular
 model = LogisticRegressionCV(random_state=1, max_iter=5000)
 
 class MappingTransformer(BaseEstimator, TransformerMixin):
@@ -422,3 +424,19 @@ enterprise_transformer = Pipeline(steps=[
   ('scale', MinMaxTransformer()), 
   ('imputer', KNNTransformer())
   ], verbose=True)
+
+
+feature_names  = ['CryoSleep', 'Age', 'VIP', 'RoomService', 'FoodCourt', 'ShoppingMall',
+                  'Spa', 'VRDeck', 'HomePlanet_Earth', 'HomePlanet_Europa',
+                  'HomePlanet_Mars', 'Side', 'Destination_55 Cancri e',
+                  'Destination_PSO J318.5-22', 'Destination_TRAPPIST-1e', 'TotalSpent',
+                  'Deck_A', 'Deck_B', 'Deck_C', 'Deck_D', 'Deck_E', 'Deck_F', 'Deck_G',
+                  'Deck_T']  
+
+
+explainer = lime.lime_tabular.LimeTabularExplainer(x_trained_numpy,
+                    feature_names=feature_names,
+                    training_labels=y_train_numpy,
+                    class_names=[0,1], #Transported values
+                    verbose=True,
+                    mode='classification')
