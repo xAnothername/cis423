@@ -405,7 +405,7 @@ enterprise_transformer = Pipeline(steps=[
   ('Home', OHETransformer(target_column='HomePlanet')),
   ('Cryo', MappingTransformer('CryoSleep', {False: 0, True: 1})),
   ('Cabin', SplittingTransformer('Cabin', ['Deck', 'Num', 'Side'], '/')),
-  ('Dest', OHETransformer(target_column='Destination')),
+  ('Dest', OHETransformer(target_column='Destination', drop_first=False)),
   ('Age', TukeyTransformer('Age', 'outer')),
   ('VIP', MappingTransformer('VIP', {False: 0, True: 1})),
   ('NaNs', NaNsTransformer(['RoomService', 'FoodCourt', 'ShoppingMall', 'Spa', 'VRDeck'], 0.0)),
