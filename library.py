@@ -402,6 +402,15 @@ def halving_search(model, grid, x_train, y_train, factor=3, scoring='roc_auc'):
   return halving_cv.fit(x_train, y_train)
 
 
+def html_table(elist):
+  yield '<table>'
+  for sublist in elist:
+    yield '  <tr><td>'
+    yield '    </td><td>'.join([sublist[0], str(sublist[1])])
+    yield '  </td></tr>'
+  yield '</table>'
+
+
 #final transformer  
 enterprise_transformer = Pipeline(steps=[
   ('Home', OHETransformer(target_column='HomePlanet', drop_first=False)),
