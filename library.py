@@ -441,11 +441,3 @@ feature_names  = ['CryoSleep', 'Age', 'VIP', 'RoomService', 'FoodCourt', 'Shoppi
                   'Destination_PSO J318.5-22', 'Destination_TRAPPIST-1e', 'TotalSpent',
                   'Deck_A', 'Deck_B', 'Deck_C', 'Deck_D', 'Deck_E', 'Deck_F', 'Deck_G',
                   'Deck_T']  
-
-
-explainer = lime.lime_tabular.LimeTabularExplainer(x_trained_numpy,
-                    feature_names=feature_names,
-                    training_labels=y_train_numpy,
-                    class_names=[0,1], #Transported values
-                    verbose=True,
-                    mode='classification')
