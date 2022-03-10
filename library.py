@@ -402,7 +402,7 @@ def halving_search(model, grid, x_train, y_train, factor=3, scoring='roc_auc'):
 
 #final transformer  
 enterprise_transformer = Pipeline(steps=[
-  ('Home', OHETransformer(target_column='HomePlanet')),
+  ('Home', OHETransformer(target_column='HomePlanet', drop_first=False)),
   ('Cryo', MappingTransformer('CryoSleep', {False: 0, True: 1})),
   ('Cabin', SplittingTransformer('Cabin', ['Deck', 'Num', 'Side'], '/')),
   ('Dest', OHETransformer(target_column='Destination', drop_first=False)),
@@ -416,7 +416,7 @@ enterprise_transformer = Pipeline(steps=[
   ('Spa', TukeyTransformer('Spa', 'outer')),
   ('VR', TukeyTransformer('VRDeck', 'outer')),
   ('Total', TukeyTransformer('TotalSpent', 'outer')),
-  ('Deck', OHETransformer(target_column='Deck')),
+  ('Deck', OHETransformer(target_column='Deck', drop_first=False)),
   ('Side', MappingTransformer('Side', {'P': 0, 'S': 1})),
   ('Drop', DropColumnsTransformer(['PassengerId', 'Name', 'Num'], 'drop')),
   ('scale', MinMaxTransformer()), 
